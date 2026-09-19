@@ -29,6 +29,6 @@ const districtSchema = new mongoose.Schema(
     }
 );
 
-const District_officer = mongoose.model("District_officer", districtSchema);
+const District = mongoose.model("District", districtSchema);
 
-export default District_officer;
+export default District;
