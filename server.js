@@ -1,15 +1,11 @@
 require("dotenv").config();
-const express=require("express");
-const connectDB=require("./src/config/db.init");
+const app=require("./src/app.js");
+const connectToDB=require("./src/config/db.init.js");
 
-connectDB();
+connectToDB();
 
-const PORT=process.env.PORT || 3000;
-
-const app=express();
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT,()=>{
-   console.log(`server is listen on PORT ${PORT}`)
+    console.log(`server is listening on ${PORT}`);
 });
-
-module.exports=app;

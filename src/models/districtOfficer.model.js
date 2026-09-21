@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose=require("mongoose");
 
 const districtOfficerSchema = new mongoose.Schema(
     {
@@ -25,4 +25,4 @@ const districtOfficerSchema = new mongoose.Schema(
 );
 
 const districtOfficer=mongoose.model("districtOfficer",districtOfficerSchema);
-export default districtOfficer;
+module.exports=districtOfficer;

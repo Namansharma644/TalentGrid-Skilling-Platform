@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose=require("mongoose");
 
 const providerSchema = new mongoose.Schema(
     {
@@ -34,4 +34,4 @@ const providerSchema = new mongoose.Schema(
 );
 
 const Provider=mongoose.model("Provider",providerSchema);
-export default Provider;
+module.exports=Provider;

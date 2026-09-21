@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose=require("mongoose");
 
 const districtSchema = new mongoose.Schema(
     {
@@ -31,4 +31,4 @@ const districtSchema = new mongoose.Schema(
 
 const District = mongoose.model("District", districtSchema);
 
-export default District;
+module.exports=District;
