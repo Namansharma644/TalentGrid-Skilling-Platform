@@ -96,7 +96,58 @@ const getMyTraineeProfile = async (req, res) => {
     }
 };
 
+const updateMyTraineeProfile = async (req, res) => {
+    try {
+
+        const { educationLevel, gender, dateOfBirth } = req.body;
+
+        const updates = {};
+
+        if (educationLevel !== undefined) {
+            updates.educationLevel = educationLevel;
+        }
+
+        if (gender !== undefined) {
+            updates.gender = gender;
+        }
+
+        if (dateOfBirth !== undefined) {
+            updates.dateOfBirth = dateOfBirth;
+        }
+
+        if (Object.keys(updates).length === 0) {
+            return res.status(400).json({
+                message: "No valid fields provided for update"
+            });
+        }
+
+        const trainee = await Trainee.findByIdAndUpdate(
+            req.trainee._id,
+            updates,
+            {
+                new: true,
+                runValidators: true
+            }
+        ).populate("district");
+
+        return res.status(200).json({
+            message: "Trainee profile updated successfully",
+            trainee
+        });
+
+    } catch (error) {
+
+        console.error("Update trainee profile error:", error);
+
+        return res.status(500).json({
+            message: "Server error"
+        });
+    }
+};
+
+
 module.exports = {
     createTraineeProfile,
-    getMyTraineeProfile
+    getMyTraineeProfile,
+    updateMyTraineeProfile
 };

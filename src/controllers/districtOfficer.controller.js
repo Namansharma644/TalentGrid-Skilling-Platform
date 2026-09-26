@@ -1,3 +1,4 @@
+const Trainee = require("../models/trainee.model");
 const DistrictOfficer=require("../models/districtOfficer.model");
 const District=require("../models/district.model");
 const User=require("../models/user.model");
@@ -74,6 +75,57 @@ const createDistrictOfficer = async (req, res) => {
     }
 };
 
+const getMyDistrictOfficerProfile = async (req, res) => {
+    try {
+
+        return res.status(200).json({
+            message: "District officer profile fetched successfully",
+            officer: req.districtOfficer
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Get district officer profile error:",
+            error
+        );
+
+        return res.status(500).json({
+            message: "Server error"
+        });
+    }
+};
+
+
+const getDistrictTrainees = async (req, res) => {
+    try {
+
+        const districtId = req.districtOfficer.district._id;
+
+        const trainees = await Trainee.find({
+            district: districtId
+        })
+        .populate("userId", "name email phone")
+        .populate("district", "name state code");
+
+        return res.status(200).json({
+            message: "District trainees fetched successfully",
+            count: trainees.length,
+            trainees
+        });
+
+    } catch (error) {
+
+        console.error("Get district trainees error:", error);
+
+        return res.status(500).json({
+            message: "Server error"
+        });
+    }
+};
+
 module.exports = {
-    createDistrictOfficer
+    createDistrictOfficer,
+    getMyDistrictOfficerProfile,
+    getDistrictTrainees
 };

@@ -4,7 +4,7 @@ const authMiddleware=require("../middlewares/auth.middleware");
 const roleMiddleware=require("../middlewares/role.middleware");
 const {
     traineeOwnership
-} = require("../middlewares/trainee.middleware");
+} = require("../middlewares/traineeOwnership.middleware");
 const traineeController = require("../controllers/trainee.controller");
 
 router.post(
@@ -19,6 +19,14 @@ router.get(
     authMiddleware,
     roleMiddleware("trainee"),
     traineeController.getMyTraineeProfile
+);
+
+router.patch(
+    "/me",
+    authMiddleware,
+    roleMiddleware("trainee"),
+    traineeOwnership,
+    traineeController.updateMyTraineeProfile
 );
 
 module.exports=router;

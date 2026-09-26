@@ -3,7 +3,9 @@ const Trainee = require("../models/trainee.model");
 const traineeOwnership = async (req, res, next) => {
     try {
 
-        const trainee = await Trainee.findById(req.params.Id);
+        const trainee = await Trainee.findOne({
+            userId : req.user.userId
+        }).populate("district");
 
         if (!trainee) {
             return res.status(404).json({
