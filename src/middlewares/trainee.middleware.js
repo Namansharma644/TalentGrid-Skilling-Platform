@@ -3,7 +3,7 @@ const Trainee = require("../models/trainee.model");
 const traineeOwnership = async (req, res, next) => {
     try {
 
-        const trainee = await Trainee.findById(req.params.id);
+        const trainee = await Trainee.findById(req.params.Id);
 
         if (!trainee) {
             return res.status(404).json({

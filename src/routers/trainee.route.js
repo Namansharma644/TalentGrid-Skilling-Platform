@@ -1,7 +1,7 @@
 const express=require("express");
 const router=express.Router();
 const authMiddleware=require("../middlewares/auth.middleware");
-const roleMiddleware=require("../middlewares/role.middleware")
+const roleMiddleware=require("../middlewares/role.middleware");
 const {
     traineeOwnership
 } = require("../middlewares/trainee.middleware");
@@ -15,11 +15,10 @@ router.post(
 );
 
 router.get(
-    "/:id",
+    "/me",
     authMiddleware,
     roleMiddleware("trainee"),
-    traineeOwnership,
-    traineeController.getTrainee
+    traineeController.getMyTraineeProfile
 );
 
 module.exports=router;

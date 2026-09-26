@@ -68,15 +68,35 @@ const createTraineeProfile = async (req, res) => {
 
 
 
-const getTrainee = async (req, res) => {
+const getMyTraineeProfile = async (req, res) => {
+    try {
 
-    return res.status(200).json({
-        message: "Trainee fetched successfully",
-        trainee: req.trainee
-    });
+        const trainee = await Trainee.findOne({
+             userId : req.user.userId
+        }).populate("district");
+
+        if (!trainee) {
+            return res.status(404).json({
+                message: "Trainee profile not found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Trainee profile fetched successfully",
+            trainee
+        });
+
+    } catch (error) {
+
+        console.error("Get trainee profile error:", error);
+
+        return res.status(500).json({
+            message: "Server error"
+        });
+    }
 };
 
 module.exports = {
     createTraineeProfile,
-    getTrainee
+    getMyTraineeProfile
 };
