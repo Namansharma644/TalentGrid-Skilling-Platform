@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema(
             enum: [
                 "government_admin",
                 "district_officer",
-                "provider",
+                "provider_user",
                 "trainee"
             ],
             required: true

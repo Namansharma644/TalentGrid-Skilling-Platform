@@ -1,4 +1,4 @@
-const mongoose=require("mongoose");
+const mongoose = require("mongoose");
 
 const providerUserSchema = new mongoose.Schema(
     {
@@ -24,5 +24,5 @@ const providerUserSchema = new mongoose.Schema(
     }
 );
 
-const providerUser=mongoose.model("providerUser",providerUserSchema);
-module.exports=providerUser;
+const providerUser = mongoose.model("providerUser", providerUserSchema);
+module.exports = providerUser;
