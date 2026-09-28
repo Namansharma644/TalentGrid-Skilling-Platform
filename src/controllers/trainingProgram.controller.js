@@ -108,8 +108,125 @@ const getTrainingProgram = async (req, res) => {
     }
 };
 
+const updateTrainingProgram = async (req, res) => {
+    try {
+
+        const { programId } = req.params;
+
+        const {
+            name,
+            description,
+            skill,
+            durationInMonths
+        } = req.body;
+
+        const updateData = {};
+
+        if (name !== undefined) {
+            updateData.name = name;
+        }
+
+        if (description !== undefined) {
+            updateData.description = description;
+        }
+
+        if (skill !== undefined) {
+            updateData.skill = skill;
+        }
+
+        if (durationInMonths !== undefined) {
+            updateData.durationInMonths = durationInMonths;
+        }
+
+         if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({
+                message: "No valid fields provided for update"
+            });
+        }
+
+        const updatedProgram = await TrainingProgram.findOneAndUpdate(
+            {
+                _id: programId,
+                provider: req.providerUser.provider
+            },
+            updateData,
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        if (!updatedProgram) {
+            return res.status(404).json({
+                message: "Training program not found or you are not authorized"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Training program updated successfully",
+            program: updatedProgram
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Update training program error:",
+            error
+        );
+
+        return res.status(500).json({
+            message: "Server error"
+        });
+    }
+};
+
+const deactivateTrainingProgram = async (req, res) => {
+    try {
+        const { programId } = req.params;
+
+        const updatedProgram = await TrainingProgram.findOneAndUpdate(
+            {
+                _id: programId,
+                provider: req.providerUser.provider
+            },
+            {
+                isActive: false
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        if (!updatedProgram) {
+            return res.status(404).json({
+                message: "Training program not found or you are not authorized"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Training program deactivated successfully",
+            program: updatedProgram
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Deactivate training program error:",
+            error
+        );
+
+        return res.status(500).json({
+            message: "Server error"
+        });
+    }
+};
+
+
 module.exports = {
     createTrainingProgram,
     getMyTrainingPrograms,
-    getTrainingProgram
+    getTrainingProgram,
+    updateTrainingProgram,
+    deactivateTrainingProgram
 };

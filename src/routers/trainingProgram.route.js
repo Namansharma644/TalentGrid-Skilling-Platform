@@ -32,5 +32,20 @@ router.get(
     trainingProgramController.getTrainingProgram
 );
 
+router.patch(
+    "/:programId",
+    authMiddleware,
+    roleMiddleware("provider_user"),
+    providerOwnership,
+    trainingProgramController.updateTrainingProgram
+);
+
+router.patch(
+    "/:programId/deactivate",
+    authMiddleware,
+    roleMiddleware("provider_user"),
+    providerOwnership,
+    trainingProgramController.deactivateTrainingProgram
+);
 
 module.exports=router;
