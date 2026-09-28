@@ -9,6 +9,9 @@ const providerUserRoute=require("./routers/providerUser.route");
 const trainingProgramRoute = require(
     "./routers/trainingProgram.route"
 );
+const enrollmentRoute=require(
+    "./routers/enrollment.route"
+);
 
 
 const app=express();
@@ -26,5 +29,6 @@ app.use("/api/district-Officer",districtOfficerRoute);
 app.use("/api/providers",providerRoute);
 app.use("/api/provider-user",providerUserRoute);
 app.use("/api/training-programs",trainingProgramRoute);
+app.use("/api/enrollment",enrollmentRoute);
 
 module.exports=app;
