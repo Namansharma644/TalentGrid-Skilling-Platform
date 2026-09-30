@@ -22,4 +22,12 @@ router.get(
     enrollmentController.getMyEnrollments
 );
 
+router.get(
+    "/:enrollmentId",
+    authMiddleware,
+    roleMiddleware("provider_user"),
+    providerOwnership,
+    enrollmentController.getEnrollment
+);
+
 module.exports=router;

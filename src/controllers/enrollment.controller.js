@@ -117,7 +117,57 @@ const getMyEnrollments = async (req, res) => {
     }
 };
 
+const getEnrollment = async (req, res) => {
+    try {
+        const { enrollmentId } = req.params;
+
+        const providerId = req.providerUser.provider;
+
+        const enrollment = await Enrollment.findById(enrollmentId)
+            .populate(
+                "trainee",
+                "traineeId educationLevel gender district"
+            )
+            .populate(
+                "trainingProgram",
+                "name description skill durationInMonths provider"
+            );
+
+        if (!enrollment) {
+            return res.status(404).json({
+                message: "Enrollment not found"
+            });
+        }
+
+        if (
+            enrollment.trainingProgram.provider.toString() !==
+            providerId.toString()
+        ) {
+            return res.status(403).json({
+                message: "You are not authorized to access this enrollment"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Enrollment fetched successfully",
+            enrollment
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Get enrollment error:",
+            error
+        );
+
+        return res.status(500).json({
+            message: "Server error"
+        });
+    }
+};
+
 module.exports = {
     createEnrollment,
-    getMyEnrollments
+    getMyEnrollments,
+    getEnrollment
 };
