@@ -71,6 +71,53 @@ const createEnrollment = async (req, res) => {
     }
 };
 
+const getMyEnrollments = async (req, res) => {
+    try {
+        const providerId = req.providerUser.provider;
+        //enrollment-->tp,trainee 
+        //with the help of providerId 
+        //provider-->tp of provider-->enrollment
+        const programs = await TrainingProgram.find({
+            provider: providerId
+        });
+
+        const programIds = programs.map(
+            program => program._id
+        );
+
+        const enrollments = await Enrollment.find({
+            trainingProgram: {
+                $in: programIds
+            }
+        })
+        .populate(
+            "trainee",
+            "traineeId educationLevel gender district"
+        )
+        .populate(
+            "trainingProgram",
+            "name description skill durationInMonths"
+        );
+
+        return res.status(200).json({
+            message: "Enrollments fetched successfully",
+            enrollments
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Get enrollments error:",
+            error
+        );
+
+        return res.status(500).json({
+            message: "Server error"
+        });
+    }
+};
+
 module.exports = {
-    createEnrollment
+    createEnrollment,
+    getMyEnrollments
 };

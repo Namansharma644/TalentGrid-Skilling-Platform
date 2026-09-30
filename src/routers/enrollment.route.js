@@ -14,4 +14,12 @@ router.post(
     enrollmentController.createEnrollment
 );
 
+router.get(
+    "/",
+    authMiddleware,
+    roleMiddleware("provider_user"),
+    providerOwnership,
+    enrollmentController.getMyEnrollments
+);
+
 module.exports=router;
