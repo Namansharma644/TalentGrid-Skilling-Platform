@@ -166,8 +166,73 @@ const getEnrollment = async (req, res) => {
     }
 };
 
+const updateEnrollmentStatus = async (req, res) => {
+    try {
+        const { enrollmentId } = req.params;
+        const { status } = req.body;
+
+        const allowedStatuses = [
+            "ENROLLED",
+            "ACTIVE",
+            "COMPLETED",
+            "DROPPED"
+        ];
+
+        if (!status || !allowedStatuses.includes(status)) {
+            return res.status(400).json({
+                message: "Invalid enrollment status"
+            });
+        }
+
+        const enrollment = await Enrollment.findById(
+            enrollmentId
+        ).populate("trainingProgram", "provider");
+
+        if (!enrollment) {
+            return res.status(404).json({
+                message: "Enrollment not found"
+            });
+        }
+
+        if (
+            enrollment.trainingProgram.provider.toString() !==
+            req.providerUser.provider.toString()
+        ) {
+            return res.status(403).json({
+                message: "You are not authorized to update this enrollment"
+            });
+        }
+
+      
+        enrollment.status = status;
+
+        if (status === "COMPLETED") {
+            enrollment.completedAt = new Date();
+        }
+
+        await enrollment.save();
+
+        return res.status(200).json({
+            message: "Enrollment status updated successfully",
+            enrollment
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Update enrollment status error:",
+            error
+        );
+
+        return res.status(500).json({
+            message: "Server error"
+        });
+    }
+};
+
 module.exports = {
     createEnrollment,
     getMyEnrollments,
-    getEnrollment
+    getEnrollment,
+    updateEnrollmentStatus
 };

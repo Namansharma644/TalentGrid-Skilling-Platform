@@ -30,4 +30,12 @@ router.get(
     enrollmentController.getEnrollment
 );
 
+router.patch(
+    "/:enrollmentId",
+    authMiddleware,
+    roleMiddleware("provider_user"),
+    providerOwnership,
+    enrollmentController.updateEnrollmentStatus
+);
+
 module.exports=router;
